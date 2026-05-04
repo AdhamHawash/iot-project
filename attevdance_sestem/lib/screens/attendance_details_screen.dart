@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../api.dart'; 
+import '../../api.dart';
 import '../../catoger_model.dart';
 
 class AttendanceDetailsScreen extends StatefulWidget {
@@ -70,9 +70,24 @@ class _AttendanceDetailsScreenState extends State<AttendanceDetailsScreen> {
 
   String formatTime(String? isoDate) {
     if (isoDate == null) return '';
+
     final dt = DateTime.tryParse(isoDate);
     if (dt == null) return '';
-    return "${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+
+    // Add 2 hours
+    final adjustedDate = dt.add(const Duration(hours: 2));
+
+    int hour = adjustedDate.hour;
+    final minute = adjustedDate.minute.toString().padLeft(2, '0');
+
+    final isAm = hour < 12;
+    final period = isAm ? 'AM' : 'PM';
+
+    // Convert to 12-hour format
+    hour = hour % 12;
+    if (hour == 0) hour = 12;
+
+    return "$hour:$minute $period";
   }
 
   @override
